@@ -12,10 +12,14 @@ export default async function decorate(block) {
     variationname = variationElem.innerHTML.trim();
   }
 
-  const url = window.location && window.location.origin && window.location.origin.includes('author')
-    ? `${aemauthorurl}${persistedquery};path=${offerpath};variation=${variationname};ts=${Math.random() * 1000}`
+  const url = window.location && ((window.location.origin.includes('author') || window.location.origin.includes('ue.da.live')))
+    ? `${aempublishurl}${persistedquery};path=${offerpath};variation=${variationname};ts=${Math.random() * 1000}`
     : `${aempublishurl}${persistedquery};path=${offerpath};variation=${variationname};ts=${Math.random() * 1000}`;
   const options = { credentials: 'include' };
+
+  if (window.location.origin.includes('ue.da.live')) {
+   console.log('offer content fragment request', { url });
+  }
 
   const cfReq = await fetch(url, options)
     .then((response) => response.json())
@@ -28,6 +32,7 @@ export default async function decorate(block) {
     });
 
   const itemId = `urn:aemconnection:${offerpath}/jcr:content/data/master`;
+  console.log('offer content fragment request', { url, options, cfReq });
 
   block.innerHTML = `
   <div class='offer-content' data-aue-resource=${itemId} data-aue-label="offer content fragment" data-aue-type="reference" data-aue-filter="cf">

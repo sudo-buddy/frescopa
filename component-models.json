@@ -8,13 +8,20 @@
         "label": "Title"
       },
       {
+        "component": "text",
+        "name": "description",
+        "label": "Description"
+      },
+      {
         "component": "reference",
-        "name": "image"
+        "name": "image",
+        "label": "Image"
       },
       {
         "component": "text",
         "name": "robots",
-        "label": "Robots"
+        "label": "Robots",
+        "description": "Index control via robots"
       }
     ]
   },
@@ -354,6 +361,60 @@
     ]
   },
   {
+    "id": "dm-video",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "thumbnail",
+        "label": "Thumbnail / poster image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "videoUrl",
+        "label": "DM video URL (/play player or direct .mp4)",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "dm-scene7-template",
+    "fields": [
+      {
+        "component": "text",
+        "name": "image",
+        "label": "Scene7 template URL",
+        "description": "Paste the full Dynamic Media image template URL (…/is/image/…?…). ",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "embed-adaptive-form",
+    "fields": [
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "formPath",
+        "value": "",
+        "label": "Form Path",
+        "validation": {
+          "rootPath": "/content/forms/af"
+        }
+      }
+    ]
+  },
+  {
     "id": "enrichment",
     "fields": [
       {
@@ -395,18 +456,6 @@
             "value": "above-category"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "form-embed",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "formPath",
-        "value": "",
-        "label": "Form Path"
       }
     ]
   },
@@ -4990,6 +5039,19 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "insights",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "note",
+        "label": "Author note",
+        "value": "",
+        "description": "Optional note in the document for authors. Usage charts and the insights list are populated from CRM data on the dashboard; you can leave this empty."
       }
     ]
   },

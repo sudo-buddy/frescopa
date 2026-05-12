@@ -9,16 +9,12 @@ import {
   decorateIcons,
   decorateSections,
   decorateTemplateAndTheme,
-  getMetadata,
-  loadScript,
-  toCamelCase,
   toClassName,
   readBlockConfig,
   waitForFirstImage,
   loadSection,
   loadSections,
   loadCSS,
-  sampleRUM,
 } from './aem.js';
 import { trackHistory } from './commerce.js';
 import initializeDropins from './initializers/index.js';
@@ -55,15 +51,15 @@ export function getAllMetadata(scope) {
 }
 
 // Define an execution context
-const pluginContext = {
-  getAllMetadata,
-  getMetadata,
-  loadCSS,
-  loadScript,
-  sampleRUM,
-  toCamelCase,
-  toClassName,
-};
+// const pluginContext = {
+//   getAllMetadata,
+//   getMetadata,
+//   loadCSS,
+//   loadScript,
+//   sampleRUM,
+//   toCamelCase,
+//   toClassName,
+// };
 
 /**
  * Moves all the attributes from a given element to another given element.
@@ -164,6 +160,14 @@ function buildTemplateColumns(doc) {
 async function applyTemplates(doc) {
   if (doc.body.classList.contains('columns')) {
     buildTemplateColumns(doc);
+  }
+
+  const templates = ['dashboard'];
+  const activeTemplate = templates.find((t) => doc.body.classList.contains(t));
+  if (activeTemplate) {
+    await loadCSS(`${window.hlx.codeBasePath}/templates/${activeTemplate}/${activeTemplate}.css`);
+    const mod = await import(`${window.hlx.codeBasePath}/templates/${activeTemplate}/${activeTemplate}.js`).catch(() => null);
+    if (mod?.default) await mod.default(doc);
   }
 }
 
@@ -322,7 +326,10 @@ async function loadEager(doc) {
     await applyTemplates(doc);
 
     // Load LCP blocks
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    await loadSection(main.querySelector('.section'), (section) => {
+      if (document.body.classList.contains('quick-edit')) return Promise.resolve();
+      return waitForFirstImage(section);
+    });
     document.body.classList.add('appear');
   }
 
@@ -371,6 +378,25 @@ async function loadLazy(doc) {
   loadFonts();
 
   await showExperimentationRail(doc, experimentationConfig);
+
+  const loadQuickEdit = async (...args) => {
+    // eslint-disable-next-line import/no-cycle
+    const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
+    initQuickEdit(...args);
+  };
+
+  const addSidekickListeners = (sk) => {
+    sk.addEventListener('custom:quick-edit', loadQuickEdit);
+  };
+
+  const sk = document.querySelector('aem-sidekick');
+  if (sk) {
+    addSidekickListeners(sk);
+  } else {
+    document.addEventListener('sidekick-ready', () => {
+      addSidekickListeners(document.querySelector('aem-sidekick'));
+    }, { once: true });
+  }
 }
 
 /**
@@ -446,7 +472,7 @@ export function getConsent(topic) {
   return true;
 }
 
-async function loadPage() {
+export async function loadPage() {
   await initializeConfig();
   await loadEager(document);
   await loadLazy(document);
@@ -455,8 +481,24 @@ async function loadPage() {
 
 loadPage();
 
-(async function loadDa() {
-  if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+(function da() {
+  const { searchParams } = new URL(window.location.href);
+
+  const lp = searchParams.get('dapreview');
   // eslint-disable-next-line import/no-unresolved
-  import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+  if (lp) import('https://da.live/scripts/dapreview.js').then((mod) => mod.default(loadPage));
+
+  const exp = searchParams.get('daexperiment');
+  // eslint-disable-next-line import/no-unresolved
+  if (exp) import('https://da.live/nx/public/plugins/exp/exp.js');
+
+  const hasQE = new URL(window.location.href).searchParams.has('quick-edit');
+  if (hasQE) import('../tools/quick-edit/quick-edit.js').then((mod) => mod.default());
+  
+// (async function loadDa() {
+//   if (!new URL(window.location.href).searchParams.get('dapreview')) return;
+//   console.info('Loading DAP Review script');
+//   // eslint-disable-next-line import/no-unresolved
+//   import('https://da.live/scripts/dapreview.js').then(({ default: daPreview }) => daPreview(loadPage));
+
 }());

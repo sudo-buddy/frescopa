@@ -38,6 +38,9 @@
           "...": "../blocks/columns/_*.json#/definitions"
         },
         {
+          "...": "../blocks/insights/_*.json#/definitions"
+        },
+        {
           "...": "../blocks/fragment/_*.json#/definitions"
         },
         {
@@ -62,10 +65,22 @@
           "...": "../blocks/form/_*.json#/definitions"
         },
         {
+          "...": "../blocks/embed-adaptive-form/_*.json#/definitions"
+        },
+        {
           "...": "../blocks/reward/_*.json#/definitions"
         },
         {
           "...": "../blocks/reward-sticky/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/video/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/dm-video/_*.json#/definitions"
+        },
+        {
+          "...": "../blocks/dm-scene7-template/_*.json#/definitions"
         },
         {
           "...": "../blocks/sticky-cta/_*.json#/definitions"

@@ -4,6 +4,9 @@
       "title": "Section",
       "id": "section",
       "plugins": {
+        "da": {
+          "unsafeHTML": "<div></div>"
+        },
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/section/v1/section",
@@ -91,11 +94,15 @@
         "product-list-page-custom",
         "product-details",
         "video",
+        "dm-video",
+        "dm-scene7-template",
         "form",
+        "embed-adaptive-form",
         "reward",
         "reward-sticky",
         "sticky-cta",
-        "quiz"
+        "quiz",
+        "insights"
       ]
     }
   ]

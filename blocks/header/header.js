@@ -11,6 +11,7 @@ import { loadFragment } from '../fragment/fragment.js';
 
 import renderAuthCombine from './renderAuthCombine.js';
 import { renderAuthDropdown } from './renderAuthDropdown.js';
+import renderCugUser from './renderCugUser.js';
 import { rootLink } from '../../scripts/scripts.js';
 
 // media query match that indicates mobile/tablet width
@@ -169,12 +170,14 @@ export default async function decorate(block) {
   const pathParts = window.location.pathname.split('/').filter(Boolean);
   let langRoot = '';
   if (pathParts.length > 0 && supportedLocales.includes(pathParts[0])) {
-    langRoot = '/' + pathParts[0];
+    langRoot = `/${pathParts[0]}`;
   }
   const navMeta = getMetadata('nav');
-  let navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-  if (langRoot && !navPath.startsWith(langRoot + '/')) {
-    navPath = langRoot + navPath;
+  const isDashboard = document.body.classList.contains('dashboard');
+  const defaultNavPath = isDashboard ? '/dashboard/dashboard-nav' : '/nav';
+  let navPath = navMeta ? new URL(navMeta, window.location).pathname : defaultNavPath;
+  if (langRoot && !navPath.startsWith(`${langRoot}/`)) {
+    navPath = `${langRoot}${navPath}`;
   }
   const fragment = await loadFragment(navPath);
 
@@ -393,4 +396,5 @@ export default async function decorate(block) {
     () => !isDesktop.matches && toggleMenu(nav, navSections, false),
   );
   renderAuthDropdown(navTools);
+  renderCugUser(navTools);
 }
