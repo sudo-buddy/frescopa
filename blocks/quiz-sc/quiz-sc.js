@@ -6,23 +6,23 @@ import { fetchBackendAPI } from '../../scripts/sc-api.js';
 /* eslint-disable no-underscore-dangle */
 export default async function decorate(block) {
   const html = htm.bind(h);
-  
+
   // Extract the path parameter from the block content
   const quizPathElement = block.querySelector(':scope div:nth-child(1) > div a');
   if (!quizPathElement) {
     return; // Let default decoration happen
   }
-  
+
   const quizpath = quizPathElement.innerHTML.trim();
 
   let questions = [];
   try {
     // Call the backend API to get content
     const response = await fetchBackendAPI(quizpath);
-    
+
     // Extract questions directly from response
     const questionsData = response?.questions;
-    
+
     if (questionsData && Array.isArray(questionsData)) {
       // Transform the simplified API response to match quiz-module expectations
       questions = questionsData.map((q) => ({

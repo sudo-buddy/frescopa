@@ -68,7 +68,8 @@ function unwrapBackendResponse(body) {
 
 /**
  * Fetches content from the backend API
- * @param {string} path - Authored path: `SITE_PATH#CONTENT_PATH` (e.g. `/aemsites/frescopa#/forms/offer`)
+ * @param {string} path - Authored path: `SITE_PATH#CONTENT_PATH`
+ *   (e.g. `/aemsites/frescopa#/forms/offer`)
  * @returns {Promise<Object|null>} The response data or null if error occurs
  */
 export async function fetchBackendAPI(path) {
@@ -89,3 +90,5 @@ export async function fetchBackendAPI(path) {
     return null;
   }
 }
+
+export default fetchBackendAPI;
