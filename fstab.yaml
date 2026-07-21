@@ -1,0 +1,7 @@
+mountpoints:
+  /:
+    url: "https://author-p154780-e1855062.adobeaemcloud.com/bin/franklin.delivery/sudo-buddy/frescopa/main"
+    type: "markup"
+    suffix: ".html"
+folders:
+  /products/: /products/default
