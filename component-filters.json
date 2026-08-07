@@ -39,12 +39,6 @@
     ]
   },
   {
-    "id": "hero",
-    "components": [
-      "hero"
-    ]
-  },
-  {
     "id": "cards",
     "components": [
       "card"
