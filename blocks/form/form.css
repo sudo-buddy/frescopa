@@ -58,6 +58,7 @@
     --form-wizard-step-legend-padding: 10px;
     --form-wizard-step-legend-font-size: 1.1rem;
     --form-field-gap: 5px;
+    --form-range-track-color: #c5c5c5;
     --form-wizard-number-size: 32px;
     --form-wizard-number-font-size: 16px;
     --form-wizard-active-text-color: var(--link-color);
